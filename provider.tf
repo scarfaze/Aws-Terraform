@@ -9,7 +9,7 @@ terraform {
 
 # Configure the AWS Provider
 provider "aws" {
-  region = "us-east-1"
+  region = "us-east-2"
   assume_role {
     role_arn = "arn:aws:iam::423623834667:role/Anisible"
   }
