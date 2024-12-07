@@ -1,0 +1,65 @@
+pipeline {
+    agent any
+
+    environment {
+        AWS_REGION = 'us-east-1'
+        // Optional: Add AWS credentials if necessary for AWS interaction (e.g., using IAM roles or environment variables)
+        // AWS_ACCESS_KEY_ID = credentials('aws-access-key')
+        // AWS_SECRET_ACCESS_KEY = credentials('aws-secret-key')
+    }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                git branch: 'main', url: 'https://github.com/mecbob/terraform-test.git'
+            }
+        }
+
+        stage('Initialize Terraform') {
+            steps {
+                sh 'terraform init'
+            }
+        }
+
+        stage('Validate Terraform') {
+            steps {
+                sh 'terraform validate'
+            }
+        }
+
+        stage('Plan Terraform') {
+            steps {
+                sh 'terraform plan -out=tfplan'
+            }
+        }
+
+        stage('Apply Terraform') {
+            steps {
+                input message: "Approve deployment?", ok: "Deploy"
+                sh 'terraform apply tfplan'
+            }
+        }
+
+        stage('Destroy Terraform') { 
+            steps { 
+                input message: "Do you want to destroy resources?", ok: "Destroy" 
+                sh 'terraform destroy -auto-approve' 
+            }
+        }
+    }
+    
+    post {
+        always {
+            // Cleanup or other actions after pipeline execution
+            echo "Pipeline completed"
+        }
+        success {
+            // Actions to take if the pipeline succeeds
+            echo "Pipeline was successful!"
+        }
+        failure {
+            // Actions to take if the pipeline fails
+            echo "Pipeline failed. Please check the logs for details."
+        }
+    }
+}
