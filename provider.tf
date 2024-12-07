@@ -1,6 +1,17 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
+
+# Configure the AWS Provider
 provider "aws" {
-  region     = "us-east-1"
-  access_key = "AKIAXKUHAHBLSKF6Z75V"
-  secret_key = "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"
+  region = "us-east-1"
+  assume_role {
+    role_arn = "arn:aws:iam::423623834667:role/Anisible"
+  }
 
 }
