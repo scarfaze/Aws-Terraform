@@ -1,6 +1,8 @@
 provider "aws" {
   region     = "us-east-1"
-  access_key = "AKIAXKUHAHBLSKF6Z75V"
-  secret_key = "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"
-
+  access_key = "AKIAWFIPSXQV7KLIANH3"
+  secret_key = "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"
+ assume_role {
+    role_arn = "arn:aws:iam::423623834667:instance-profile/Anisible"
+  }
 }
